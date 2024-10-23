@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hk.music.api.mapper.MusicMyFavoriteMapper">
+
+    <select id="selectLikeMusicPage" resultType="com.hk.music.api.entity.MusicInfo">
+        SELECT
+            i.id,
+            i.music_name,
+            i.cover_image,
+            i.author,
+            i.user_id,
+            i.play_count,
+            i.like_count,
+            i.create_type,
+            i.lyric_content,
+            i.lyric_url,
+            i.duration,
+            i.artist_id,
+            mf.create_time,
+            TRUE AS is_favorite
+        FROM
+            `music_info` AS i
+                JOIN
+            `music_my_favorite` AS mf ON i.id = mf.music_id
+        WHERE
+            mf.del_flag = 0
+          AND mf.user_id = #{userId}
+        ORDER BY
+            mf.id DESC
+    </select>
+
+</mapper>

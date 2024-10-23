@@ -1,0 +1,18 @@
+[Unit]
+Description=music开机自动启动
+After=network.target
+
+[Service]
+WorkingDirectory=/usr/local/medicine
+User=root
+ExecStart=/usr/local/java/jdk-11.0.2/bin/java -jar -XX:+UseG1GC -XX:PretenureSizeThreshold=2M -XX:+UseCompressedOops -XX:+UseTLAB -Dspring.profiles.active=prod /usr/local/medicine/medicine-pc-1.0.jar >/dev/null 2>&1 &
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=10
+StartLimitBurst=3
+StandardOutput=inherit
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target

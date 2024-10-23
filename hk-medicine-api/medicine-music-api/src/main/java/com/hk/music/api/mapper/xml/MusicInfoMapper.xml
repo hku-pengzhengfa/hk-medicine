@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hk.music.api.mapper.MusicInfoMapper">
+
+    <select id="selectMusicInfoListToLikeNum" resultType="com.hk.music.api.entity.MusicInfo">
+        select distinct mi.*
+        from music_info mi
+                 join music_my_favorite mf on mi.id = mf.music_id
+        where date(mi.create_time) = curdate() - interval 1 day
+        order by mi.like_count desc;
+    </select>
+
+    <select id="selectSingerMusicPage" resultType="com.hk.music.api.vo.MusicInfoVo">
+        select
+            m.`id`,
+            m.`music_name`,
+            m.`cover_image`,
+            m.`author`,
+            m.`user_id`,
+            m.`play_count`,
+            m.`like_count`,
+            m.`collect_count`,
+            m.`voice_type`,
+            m.`create_type`,
+            m.`lyric_content`,
+            m.`lyric_url`,
+            m.`video_url`,
+            m.`duration`,
+            m.`artist_id`,
+            m.`music_desc`,
+            m.`create_time`,
+            if ( ifnull( ff.`user_id`, 0 ) = #{userId}, 1, 0 ) AS favorite,
+            m.`is_new`
+        from
+            music_info m
+                LEFT JOIN music_my_favorite ff ON m.id = ff.music_id
+                AND ff.user_id = #{userId}
+                AND ff.del_flag = 0
+        where
+            m.artist_id = #{singerId}
+        order by
+            m.id desc
+    </select>
+</mapper>
