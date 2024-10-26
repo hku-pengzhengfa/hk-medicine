@@ -30,5 +30,4 @@ public class UserScoreLogServiceController {
     public Result<IPage<MusicUserScoreLog>> selectUserScorePage(@Valid @RequestBody ScoreLogDto scoreLogDto) {
         return Result.success(musicUserScoreLogService.selectUserScorePage(scoreLogDto), "Request succeeded");
     }
-
 }

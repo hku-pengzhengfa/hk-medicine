@@ -3,8 +3,6 @@ package com.hk.music.api.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hk.music.api.dto.MusicDto;
 import com.hk.music.api.entity.MusicInfo;
-import com.hk.music.api.vo.MusicInfoVo;
-
 import java.util.List;
 
 /**
@@ -41,7 +39,7 @@ public interface MusicInfoService {
      * @param musicDto
      * @return
      */
-    IPage<MusicInfoVo> selectSingerMusicPage(MusicDto musicDto);
+    IPage<MusicInfo> selectSingerMusicPage(MusicDto musicDto);
 
     /**
      * 查询我发布的音乐分页列表
@@ -50,4 +48,11 @@ public interface MusicInfoService {
      * @return
      */
     IPage<MusicInfo> selectPublishPage(MusicDto musicDto);
+
+    /**
+     * 查询我的历史播放列表
+     * @param musicDto
+     * @return
+     */
+    IPage<MusicInfo> selectMusicHistoryPage(MusicDto musicDto);
 }

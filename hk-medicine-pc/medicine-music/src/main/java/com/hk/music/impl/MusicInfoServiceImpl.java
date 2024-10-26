@@ -9,11 +9,9 @@ import com.hk.music.api.entity.MusicInfo;
 import com.hk.music.api.mapper.MusicInfoMapper;
 import com.hk.music.api.service.MusicInfoService;
 import com.hk.music.api.service.UserInfoService;
-import com.hk.music.api.vo.MusicInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,9 +69,9 @@ public class MusicInfoServiceImpl extends ServiceImpl<MusicInfoMapper, MusicInfo
     }
 
     @Override
-    public IPage<MusicInfoVo> selectSingerMusicPage(MusicDto musicDto) {
+    public IPage<MusicInfo> selectSingerMusicPage(MusicDto musicDto) {
         Long userId = userInfoService.selectUserId();
-        Page<MusicInfoVo> page = new Page<>(musicDto.getPageNo(), musicDto.getPageSize());
+        Page<MusicInfo> page = new Page<>(musicDto.getPageNo(), musicDto.getPageSize());
         return baseMapper.selectSingerMusicPage(page, musicDto.getSingerId(), userId);
     }
 
@@ -85,5 +83,12 @@ public class MusicInfoServiceImpl extends ServiceImpl<MusicInfoMapper, MusicInfo
         queryWrapper.eq("user_id", userId);
         queryWrapper.orderByDesc("id");
         return baseMapper.selectPage(page, queryWrapper);
+    }
+
+    @Override
+    public IPage<MusicInfo> selectMusicHistoryPage(MusicDto musicDto) {
+        Long userId = userInfoService.selectUserId();
+        Page<MusicInfo> page = new Page<>(musicDto.getPageNo(), musicDto.getPageSize());
+        return baseMapper.selectMusicHistoryPage(page,userId);
     }
 }

@@ -10,7 +10,7 @@
         order by mi.like_count desc;
     </select>
 
-    <select id="selectSingerMusicPage" resultType="com.hk.music.api.vo.MusicInfoVo">
+    <select id="selectSingerMusicPage" resultType="com.hk.music.api.entity.MusicInfo">
         select
             m.`id`,
             m.`music_name`,
@@ -40,5 +40,13 @@
             m.artist_id = #{singerId}
         order by
             m.id desc
+    </select>
+
+    <select id="selectMusicHistoryPage" resultType="com.hk.music.api.entity.MusicInfo">
+        select h.id as history_id, i.id, i.user_id, i.music_name,i.cover_image,i.cover_large_image,
+               i.author, i.lyric_url, i.video_url,i.duration,i.create_type,
+               h.create_time,if(f.user_id is null,0,1) is_favorite from  `music_info` as i join  `music_history` as h on i.id = h.music_id
+              left join music_my_favorite as f on f.user_id = h.`user_id` and f.music_id =  h.music_id and f.del_flag = 0
+        where h.del_flag = 0 and h.user_id = #{userId} order by h.id desc
     </select>
 </mapper>

@@ -100,5 +100,10 @@ public class MusicInfo implements Serializable {
     private String updateTime;
 
     @Transient
+    @TableField(exist = false)
     private Boolean isFavorite = false;
+
+    @Transient
+    @TableField(exist = false)
+    private Integer historyId;
 }
