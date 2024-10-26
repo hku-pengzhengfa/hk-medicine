@@ -12,4 +12,5 @@ public interface EthTransactionService {
     EthTransaction selectEthTransaction(Long raffleId);
 
     boolean transferEth(Long raffleId, String toAddress, BigDecimal amount);
+
 }
