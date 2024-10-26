@@ -5,6 +5,7 @@ import com.hk.music.api.service.UserRaffleService;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -24,12 +25,18 @@ public class RaffleTask {
     @Autowired
     private UserRaffleDetailsService userRaffleDetailsService;
 
+    @Value("${nft.raffleTotal}")
+    private Integer raffleTotal;
+
+    @Value("${nft.ethAmountTotal}")
+    private double ethAmountTotal;
+
     /**
      * 用户抽奖
      */
     @XxlJob("userRaffle")
     public void userRaffle() {
-        userRaffleService.userRaffle(50);
+        userRaffleService.userRaffle(raffleTotal);
     }
 
     /**
@@ -37,6 +44,6 @@ public class RaffleTask {
      */
     @XxlJob("openUserRaffle")
     public void openUserRaffle() {
-        userRaffleDetailsService.openUserRaffle(BigDecimal.valueOf(1.25));
+        userRaffleDetailsService.openUserRaffle(ethAmountTotal);
     }
 }

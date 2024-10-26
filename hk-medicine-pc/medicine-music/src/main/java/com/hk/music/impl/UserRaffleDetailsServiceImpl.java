@@ -84,27 +84,29 @@ public class UserRaffleDetailsServiceImpl extends ServiceImpl<UserRaffleDetailsM
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void openUserRaffle(BigDecimal ethAmountTotal) {
+    public void openUserRaffle(double ethAmountTotal) {
         QueryWrapper<UserRaffleDetails> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status", 0);
         List<UserRaffleDetails> userRaffleDetailsList = baseMapper.selectList(queryWrapper);
-        BigDecimal ethAmount = BigDecimal.ZERO;
-        if (userRaffleDetailsList.size() > 0) {
-            ethAmount = ethAmountTotal.divide(BigDecimal.valueOf(userRaffleDetailsList.size()));
+        int num = userRaffleDetailsList.size();
+        if (num == 0) {
+            log.warn("没有可开奖的用户");
+            return;
         }
+        int size = num + 1;
+        double ethAmount = ethAmountTotal / size;
+        BigDecimal ethAmountBigDecimal = BigDecimal.valueOf(ethAmount);
         for (UserRaffleDetails info : userRaffleDetailsList) {
             info.setStatus(1);
             info.setPayStatus(0);
-            info.setEthAmount(ethAmount);
+            info.setEthAmount(ethAmountBigDecimal);
             info.setUpdateTime(TimeUtils.currentTime());
         }
-        if (!userRaffleDetailsList.isEmpty()) {
-            try {
-                updateBatchById(userRaffleDetailsList);
-            } catch (Exception e) {
-                log.error("用户开奖异常:{}", e);
-                throw new RuntimeException("用户开奖异常:{}", e);
-            }
+        try {
+            super.updateBatchById(userRaffleDetailsList);
+        } catch (Exception e) {
+            log.error("用户开奖异常:{}", e);
+            throw new RuntimeException("用户开奖异常", e);
         }
     }
 

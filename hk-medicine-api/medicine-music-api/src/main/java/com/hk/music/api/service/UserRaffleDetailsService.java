@@ -24,7 +24,7 @@ public interface UserRaffleDetailsService {
      *
      * @param ethAmountTotal
      */
-    void openUserRaffle(BigDecimal ethAmountTotal);
+    void openUserRaffle(double ethAmountTotal);
 
 
     /**
